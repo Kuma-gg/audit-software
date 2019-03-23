@@ -1,0 +1,30 @@
+{
+  "name": "audit-software",
+  "version": "0.0.0",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Kuma-gg/audit-software"
+  },
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.16.0",
+    "materialize-css": "^1.0.0-rc.2",
+    "mongodb": "^3.1.6",
+    "morgan": "~1.9.0",
+    "nconf": "^0.10.0",
+    "npm": "^6.4.1",
+    "pug": "^2.0.3",
+    "socket.io": "^2.1.1"
+  },
+  "devDependencies": {
+    "mocha": "5.2.0",
+    "should": "13.2.3",
+    "start-server-and-test": "^1.7.1",
+    "supertest": "3.3.0"
+  }
+}

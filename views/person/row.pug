@@ -1,0 +1,11 @@
+tr(id=`row-${person._id}`)
+    -var dateBirthday = new Date(person.birthday)
+    -person.birthday = `${(`0${dateBirthday.getUTCDate()}`).slice(-2)}/${(`0${(dateBirthday.getUTCMonth() + 1)}`).slice(-2)}/${dateBirthday.getUTCFullYear()}`
+    td=person.name
+    td=person.lastName
+    td=person.birthday
+    td
+        a(id=`uptadeButton-${person._id}`, data-object=person).update.waves-effect.waves-light.btn.blue
+            i.material-icons edit
+        a(id=`removeButton-${person._id}`, data-id=person._id).remove.waves-effect.waves-light.btn.red
+            i.material-icons delete
