@@ -28,14 +28,16 @@ block content
                     input#inputBirthday.datepicker(type="text")
                     label(for="inputBirthday") Birthday
                 .input-field.col.s12.m6
-                    input#inputUserName.validate(type="text")
-                    label(for="inputUserName") Username
+                    input#inputUsername.validate(type="text")
+                    label(for="inputUsername") Username
                 .input-field.col.s12.m6
                     input#inputPassword.validate(type="password")
                     label(for="inputPassword") Password
                 .input-field.col.s12.m6
                     input#inputRepeatPassword.validate(type="password")
                     label(for="inputRepeatPassword") Repeat Password
+            .row
+                ul#errorMessage.red-text.col.s12
         .modal-footer
             a.modal-close.waves-effect.waves-red.btn-flat(href='javascript:void(0);') Cancel
             a#modalSubmit.waves-effect.waves-green.btn-flat(href='javascript:void(0);')

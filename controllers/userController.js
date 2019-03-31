@@ -1,5 +1,7 @@
 var modelUser = require("../models/user");
 var pug = require("pug");
+var passwordValidator = require("password-validator");
+var md5 = require("md5");
 
 var userController = (io) => {
     var pages = {
@@ -17,13 +19,69 @@ var userController = (io) => {
     };
     io.on("connection", (socket) => {
         socket.on("insert", (data) => {
-            modelUser.insert(data).then((user) => {
-                var fn = pug.compileFile("./views/user/row.pug");
-                io.emit("inserted", {
-                    id: user._id,
-                    html: fn({ user: user })
+            if (md5(data.password) === md5(data.repeatPassword)) {
+                //Validation
+                var passwordSchema = new passwordValidator();
+                passwordSchema
+                    .is().min(8)                                    // Minimum length 8
+                    .is().max(100)                                  // Maximum length 100
+                    .has().uppercase()                              // Must have uppercase letters
+                    .has().lowercase()                              // Must have lowercase letters
+                    .has().digits()                                 // Must have digits
+                    .has().not().spaces()                           // Should not have spaces
+                    .is().not().oneOf(["password", "Password", "123"]); // Blacklist these values
+                var failedList = passwordSchema.validate(data.password, { list: true });
+                if (failedList.length == 0) {
+                    var fn = pug.compileFile("./views/user/row.pug");
+                    modelUser.insert(data).then((user) => {
+                        io.emit("inserted", {
+                            success: true,
+                            id: user._id,
+                            html: fn({ user: user })
+                        });
+                    });
+                } else {
+                    invalidPassword(failedList);
+                }
+            } else {
+                invalidPassword(["notEqual"]);
+            }
+
+            function invalidPassword(failedList) {
+                var messages = [];
+                failedList.forEach((invalid) => {
+                    switch (invalid) {
+                        case "notEqual":
+                            messages.push("Please make sure you repeated the correct password.");
+                            break;
+                        case "min":
+                            messages.push("The password is too short. You need more than 8 characters.");
+                            break;
+                        case "max":
+                            messages.push("The password is too long. You need less than 100 characters.");
+                            break;
+                        case "uppercase":
+                            messages.push("The password requires uppercase letters.");
+                            break;
+                        case "lowercase":
+                            messages.push("The password requires lowercase letters.");
+                            break;
+                        case "digits":
+                            messages.push("The password requires digits.");
+                            break;
+                        case "spaces":
+                            messages.push("The password cannot have spaces.");
+                            break;
+                        case "oneOf":
+                            messages.push("Weak password.");
+                            break;
+                    }
                 });
-            });
+                io.emit("inserted", {
+                    success: false,
+                    failedList: messages,
+                });
+            }
         });
         socket.on("update", (data) => {
             modelUser.update(data).then((user) => {

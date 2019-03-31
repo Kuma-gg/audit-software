@@ -9,6 +9,10 @@ var inputId = document.getElementById("inputId");
 var inputName = document.getElementById("inputName");
 var inputLastName = document.getElementById("inputLastName");
 var inputBirthday = document.getElementById("inputBirthday");
+var inputUsername = document.getElementById("inputUsername");
+var inputPassword = document.getElementById("inputPassword");
+var inputRepeatPassword = document.getElementById("inputRepeatPassword");
+var errorMessage = document.getElementById("errorMessage");
 var table = document.getElementById("table");
 var picker = M.Datepicker.getInstance(inputBirthday);
 var editing = false;
@@ -19,7 +23,12 @@ newButton.addEventListener("click", () => {
     inputId.value = "";
     inputName.value = "";
     inputLastName.value = "";
-    inputBirthday.value = "";
+    inputBirthday.value = "31/03/2019";
+    inputUsername.value = "";
+    inputPassword.value = "";
+    inputRepeatPassword.value = "";
+    errorMessage.innerHTML = "";
+    M.updateTextFields();
     editing = false;
     modal.open();
 });
@@ -34,7 +43,6 @@ modalSumbit.addEventListener("click", () => {
     } else {
         socket.emit("insert", getForm());
     }
-    modal.close();
 });
 
 for (i = 0; i < removeButtons.length; i++) {
@@ -62,6 +70,10 @@ function addUpdateListener(ele) {
         inputName.value = data.name;
         inputLastName.value = data.lastName;
         inputBirthday.value = data.birthday;
+        inputUsername = data.username;
+        inputPassword.value = "";
+        inputRepeatPassword.value = "";
+        errorMessage.innerHTML = "";
         M.updateTextFields();
         editing = true;
         modal.open();
@@ -74,14 +86,26 @@ function getForm() {
         id: inputId.value,
         name: inputName.value,
         lastName: inputLastName.value,
-        birthday: new Date(birthdayTokens[2], parseInt(birthdayTokens[1]) - 1, birthdayTokens[0])
+        birthday: new Date(birthdayTokens[2], parseInt(birthdayTokens[1]) - 1, birthdayTokens[0]),
+        username: inputUsername.value,
+        password: inputPassword.value,
+        repeatPassword: inputRepeatPassword.value
     };
 }
 
 socket.on("inserted", (object) => {
-    table.insertAdjacentHTML("beforeend", object.html);
-    addUpdateListener(document.getElementById(`uptadeButton-${object.id}`));
-    addRemoveListener(document.getElementById(`removeButton-${object.id}`));
+    if (object.success) {
+        table.insertAdjacentHTML("beforeend", object.html);
+        addUpdateListener(document.getElementById(`uptadeButton-${object.id}`));
+        addRemoveListener(document.getElementById(`removeButton-${object.id}`));
+        modal.close();
+    } else {
+        object.failedList.forEach((invalid) => {
+            var li = document.createElement("li");
+            li.innerHTML = invalid;
+            errorMessage.appendChild(li);
+        });
+    }
 });
 
 socket.on("updated", (object) => {
