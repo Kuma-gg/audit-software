@@ -5,9 +5,9 @@ module.exports = {
             res.redirect("/users");
         } else {
             //user not logged
-            res.render('login', {
-                title: req.app.get('app-name'),
-                error: req.flash('error')
+            res.render("login", {
+                title: req.app.get("app-name"),
+                error: req.flash("error")
             });
         }
     },
@@ -17,6 +17,6 @@ module.exports = {
     },
     logout: (req, res, next) => {
         req.logout();
-        res.redirect('/');
+        res.redirect("/");
     }
 };

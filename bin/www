@@ -4,20 +4,20 @@
  * Module dependencies.
  */
 
-var app = require('../app');
-var path = require('path');
-var http = require('http');
-var os = require('os');
-var cluster = require('cluster');
-var nconf = require('nconf');
-nconf.argv().env().file({file: path.join(__dirname, '..', 'config.json')});
+var app = require("../app");
+var path = require("path");
+var http = require("http");
+var os = require("os");
+var cluster = require("cluster");
+var nconf = require("nconf");
+nconf.argv().env().file({ file: path.join(__dirname, "..", "config.json") });
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || nconf.get(app.get('env')).port);
-app.set('port', port);
+var port = normalizePort(process.env.PORT || nconf.get(app.get("env")).port);
+app.set("port", port);
 
 // Code to run if we're in the master process
 /*if (cluster.isMaster) {
@@ -33,61 +33,61 @@ app.set('port', port);
 		console.log(`Worker ${worker.id} is online.`);
 	});
 } else {*/
-	/**
-	 * Create HTTP server along with Socket IO.
-	 */
-	var server = http.createServer(app);
-	var io = app.io
-	io.attach(server);
+/**
+ * Create HTTP server along with Socket IO.
+ */
+var server = http.createServer(app);
+var io = app.io;
+io.attach(server);
 
-	/**
-	 * Listen on provided port, on all network interfaces.
-	 */
-	server.listen(port)
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+server.listen(port);
 
-	/**
-	 * Event listener for HTTP server "error" event.
-	 */
-	server.on('error', (error)=>{
-		if (error.syscall !== 'listen') {
-			throw error;
-		}
-		var bind = typeof port === 'string'
-			? 'Pipe ' + port
-			: 'Port ' + port;
-		// handle specific listen errors with friendly messages
-		switch (error.code) {
-			case 'EACCES':
-				console.error(bind + ' requires elevated privileges');
-				process.exit(1);
-				break;
-			case 'EADDRINUSE':
-				console.error(bind + ' is already in use');
-				process.exit(1);
-				break;
-			default:
-				throw error;
-		}
-	});
-
-	/**
-	 * Server log.
-	 */
-	if (app.get('env') === 'development'){
-		console.log(os.networkInterfaces());
+/**
+ * Event listener for HTTP server "error" event.
+ */
+server.on("error", (error) => {
+	if (error.syscall !== "listen") {
+		throw error;
 	}
+	var bind = typeof port === "string"
+		? "Pipe " + port
+		: "Port " + port;
+	// handle specific listen errors with friendly messages
+	switch (error.code) {
+		case "EACCES":
+			console.error(bind + " requires elevated privileges");
+			process.exit(1);
+			break;
+		case "EADDRINUSE":
+			console.error(bind + " is already in use");
+			process.exit(1);
+			break;
+		default:
+			throw error;
+	}
+});
 
-	/**
-	 * Event listener for HTTP server "listening" event.
-	 */
-	server.on('listening', () => {
-		var addr = server.address();
-		var bind = typeof addr === 'string'
-			? `${addr.address}`
-			: `port ${addr.port}`;
-		//console.log(`Server running on ${bind} `);
-		console.log(`Server listening ${addr.address == '::' ? 'localhost' : addr.address}:${addr.port} in ${app.get('env')} mode.`);
-	});
+/**
+ * Server log.
+ */
+if (app.get("env") === "development") {
+	console.log(os.networkInterfaces());
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+server.on("listening", () => {
+	var addr = server.address();
+	var bind = typeof addr === "string"
+		? `${addr.address}`
+		: `port ${addr.port}`;
+	//console.log(`Server running on ${bind} `);
+	console.log(`Server listening ${addr.address == "::" ? "localhost" : addr.address}:${addr.port} in ${app.get("env")} mode.`);
+});
 //}
 
 /**

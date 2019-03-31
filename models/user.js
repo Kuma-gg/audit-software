@@ -1,5 +1,5 @@
-var assert = require('assert');
-var mongodb = require('mongodb');
+var assert = require("assert");
+var mongodb = require("mongodb");
 const con = require("./connection"),
     collectionName = "user";
 
@@ -24,7 +24,7 @@ var model = {
      */
     select: (data = {}) => {
         if (data.id) {
-            data._id = new mongodb.ObjectID(data.id)
+            data._id = new mongodb.ObjectID(data.id);
             delete data.id;
         }
         return new Promise((resolve, reject) => {
@@ -77,8 +77,8 @@ var model = {
                 const collection = db.collection(collectionName);
                 collection.findOneAndUpdate({ _id: new mongodb.ObjectID(data.id) }, { $set: data }, function (err, docs) {
                     model.select({ id: data.id }).then((doc) => {
-                        resolve(doc[0])
-                    })
+                        resolve(doc[0]);
+                    });
                 });
             });
         });
@@ -102,6 +102,6 @@ var model = {
             });
         });
     }
-}
+};
 
 module.exports = model;
