@@ -33,6 +33,8 @@ var userController = (io) => {
                 var failedList = passwordSchema.validate(data.password, { list: true });
                 if (failedList.length == 0) {
                     var fn = pug.compileFile("./views/user/row.pug");
+                    data.password = md5(data.password);
+                    delete data.repeatPassword;
                     modelUser.insert(data).then((user) => {
                         io.emit("inserted", {
                             success: true,

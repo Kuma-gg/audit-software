@@ -7,6 +7,8 @@ var info = require("./package.json");
 var passport = require("passport");
 var Strategy = require("passport-local").Strategy;
 var flash = require("connect-flash");
+var md5 = require("md5");
+var modelUser = require("./models/user");
 
 /* App socket */
 var app = express();
@@ -14,13 +16,19 @@ var io = app.io = require("socket.io")();
 var ioUser = io.of("/user");
 
 /* Passport for user auth */
-const lolpez = { id: 666, name: "Luis", lastName: "Lopez", email: "luis@gmail.com", role: { id: 777, name: "manager" } };
 passport.use(new Strategy(function (username, password, callback) {
-	if (username == "admin" && password == "password") {
-		return callback(null, lolpez);
-	} else {
-		return callback(null, false);
-	}
+	modelUser.select({ username: username, password: md5(password) }).then((user) => {
+		if (user.length == 1) {
+			return callback(null, {
+				id: user[0]._id,
+				name: user[0].name,
+				lastName: user[0].lastName,
+				role: { id: 777, name: "manager" }
+			});
+		} else {
+			return callback(null, false);
+		}
+	});
 }));
 
 passport.serializeUser(function (user, callback) {
@@ -28,12 +36,19 @@ passport.serializeUser(function (user, callback) {
 });
 
 passport.deserializeUser(function (id, callback) {
-	if (id == 666) {
-		callback(null, lolpez);
-	} else {
-		//The user does not exists
-		return callback(null, false);
-	}
+	modelUser.select({ id: id }).then((user) => {
+		if (user.length == 1) {
+			callback(null, {
+				id: user[0]._id,
+				name: user[0].name,
+				lastName: user[0].lastName,
+				role: { id: 777, name: "manager" }
+			});
+		} else {
+			//The user does not exist
+			return callback(null, false);
+		}
+	});
 });
 
 /* App settings */
