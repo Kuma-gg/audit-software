@@ -53,7 +53,7 @@ app.use(flash());
 
 /* Routes */
 var indexRouter = require('./routes/indexRouter');
-var userRouter = require('./routes/person');
+var userRouter = require('./routes/userRouter');
 var killMeRouter = require('./routes/kill-me');
 app.use('/', indexRouter);
 app.use('/users', userRouter(ioUser));

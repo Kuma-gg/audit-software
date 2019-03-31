@@ -1,6 +1,6 @@
 extends ../layout
 block content
-    h3=`${title} collection`
+    h3 Users
     a#newButton.waves-effect.waves-light.btn.green
         i.material-icons add
     table.highlight
@@ -11,7 +11,7 @@ block content
                 th Birthday
                 th Actions
         tbody#table
-            each person in people
+            each user in users
                 include ./row
     #modal.modal
         .modal-content
@@ -49,7 +49,7 @@ block scripts
         var editing = false;
 
         newButton.addEventListener('click', () => {
-            modalTitle.innerHTML = 'New person';
+            modalTitle.innerHTML = 'New user';
             modalSumbit.innerHTML = 'Create';
             inputId.value = '';
             inputName.value = '';
@@ -91,7 +91,7 @@ block scripts
         function addUpdateListener(ele){
             var data = JSON.parse(ele.dataset.object);
             ele.addEventListener('click', () => {
-                modalTitle.innerHTML = 'Update person';
+                modalTitle.innerHTML = 'Update user';
                 modalSumbit.innerHTML = 'Update';
                 inputId.value = data._id;
                 inputName.value = data.name;
