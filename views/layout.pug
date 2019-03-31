@@ -13,7 +13,7 @@ html
 						a.brand-logo(href='/')
 							i.material-icons home
 							| #{title}
-						a.sidenav-trigger(href='#', data-target='mobile-nav')
+						a.sidenav-trigger(href='javascript:void(0);', data-target='mobile-nav')
 							i.material-icons menu
 						ul#nav-mobile.right.hide-on-med-and-down
 							li
@@ -52,7 +52,7 @@ html
 			.row
 				.s12
 					block content
-		script(src='./socket.io/socket.io.js')
-		script(src='./js/materialize.min.js')
-		script(src='./js/script.js')
+		script(src='/socket.io/socket.io.js')
+		script(src='/js/materialize.min.js')
+		script(src='/js/script.js')
 		block scripts
