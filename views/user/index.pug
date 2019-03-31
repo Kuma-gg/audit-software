@@ -17,19 +17,28 @@ block content
         .modal-content
             h4#modalTitle
             .row
-                input#inputId.validate(type='hidden')
+                input#inputId.validate(type="hidden")
                 .input-field.col.s12.m6
-                    input#inputName.validate(type='text')
-                    label(for='inputName') First Name
+                    input#inputName.validate(type="text")
+                    label(for="inputName") First Name
                 .input-field.col.s12.m6
-                    input#inputLastName.validate(type='text')
-                    label(for='inputLastName') Last Name
+                    input#inputLastName.validate(type="text")
+                    label(for="inputLastName") Last Name
                 .input-field.col.s12.m6
-                    input#inputBirthday.datepicker(type='text')
-                    label(for='inputBirthday') Birthday
+                    input#inputBirthday.datepicker(type="text")
+                    label(for="inputBirthday") Birthday
+                .input-field.col.s12.m6
+                    input#inputUserName.validate(type="text")
+                    label(for="inputUserName") Username
+                .input-field.col.s12.m6
+                    input#inputPassword.validate(type="password")
+                    label(for="inputPassword") Password
+                .input-field.col.s12.m6
+                    input#inputRepeatPassword.validate(type="password")
+                    label(for="inputRepeatPassword") Repeat Password
         .modal-footer
-            a.modal-close.waves-effect.waves-red.btn-flat(href='#!') Cancel
-            a#modalSubmit.waves-effect.waves-green.btn-flat(href='#!')
+            a.modal-close.waves-effect.waves-red.btn-flat(href='javascript:void(0);') Cancel
+            a#modalSubmit.waves-effect.waves-green.btn-flat(href='javascript:void(0);')
             
 block scripts
-    script(src='/js/user.js')
+    script(src="/js/user.js")
