@@ -2,10 +2,10 @@ doctype html
 html
 	head
 		title=title
-		link(type='text/css', rel='stylesheet', href='./css/materialize.min.css', media='screen,projection')
-		link(type='text/css', rel='stylesheet', href='./css/style.css', media='screen,projection')
+		link(type='text/css', rel='stylesheet', href='/css/materialize.min.css', media='screen,projection')
+		link(type='text/css', rel='stylesheet', href='/css/style.css', media='screen,projection')
 		meta(name='viewport', content='width=device-width, initial-scale=1.0')
-	body.grey.lighten-2
+	body
 		.navbar-fixed
 			nav.red.darken-4
 				.container
@@ -17,9 +17,17 @@ html
 							i.material-icons menu
 						ul#nav-mobile.right.hide-on-med-and-down
 							li
-								a(href='/wiki', target='_blank')
+								a.dropdown-trigger(href='javascript:void(0);',  data-target='dropdown-menu')
 									i.material-icons.left person
-									| #{user}
+									| #{user.name} #{user.role.name}
+						ul#dropdown-menu.dropdown-content
+							li
+								a(href='/profile', title="My profile").black-text My profile
+									i.material-icons person
+							li.divider
+							li
+								a(href='/logout', title="Log out").red-text Logout
+									i.material-icons power_settings_new							
 		ul#mobile-nav.sidenav
 			li
 			.user-view

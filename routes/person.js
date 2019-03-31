@@ -25,9 +25,9 @@ var personRouter = function (io) {
 	router.get('/', (req, res, next) => {
 		modelPerson.select().then((people) => {
 			res.render('person/index', {
-				title: 'Audit Software',
-				user: 'Oso',
+				title: req.app.get('app-name'),
 				version: req.app.get('version'),
+				user: req.user,
 				people: people
 			});
 		});
