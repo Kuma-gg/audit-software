@@ -4,7 +4,7 @@ html {
   
 body {
 	min-height: 100%;
-	background-color: #d8d8d8;
+	background-color: #e0e0e0;
 }
 
 a {
@@ -19,16 +19,16 @@ a {
 
 .login-title{
 	font-size: 35px;
-	color: #123;
+	color: #B71C1C;
 }
 
 .login-button{
     text-align: center;
-    background-color: darkgray
+    background-color: #B71C1C
 }
 
 .login-button:hover{
-    background-color: rgba(187, 175, 221)
+    background-color: #4b0d0983
 }
 
 .login-logo{

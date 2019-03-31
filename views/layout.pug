@@ -5,7 +5,7 @@ html
 		link(type='text/css', rel='stylesheet', href='/css/materialize.min.css', media='screen,projection')
 		link(type='text/css', rel='stylesheet', href='/css/style.css', media='screen,projection')
 		meta(name='viewport', content='width=device-width, initial-scale=1.0')
-	body
+	body.grey.lighten-2
 		.navbar-fixed
 			nav.red.darken-4
 				.container
@@ -34,12 +34,18 @@ html
 				.background.red.darken-4
 				a(href='#user')
 					img.circle(src='/img/PenguinDab.png')
-				a(href='https://github.com/Kuma-gg', target='_blank')
-					span.white-text.name Kumλ
-				a(href='https://github.com/Kuma-gg/audit-software', target='_blank')
-					span.white-text.email #{title}
+				span.white-text.name=user.name
+				span.white-text.email=user.role.name
+			li
+				a(href="/users") Users
+			li
+				a(href="/logout") Logout
 			li
 				.divider
+			li
+				a(href='https://github.com/Kuma-gg', target='_blank') About us
+			li
+				a(href="https://github.com/Kuma-gg/audit-software", target='_blank') Repository
 			li
 				a.subheader=version
 		.container
