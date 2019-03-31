@@ -1,4 +1,4 @@
-var modelUser = require('../models/person');
+var modelUser = require('../models/user');
 var pug = require('pug');
 
 var userController = (io) => {
@@ -6,7 +6,7 @@ var userController = (io) => {
         /* GET home page. */
         userPage: (req, res, next) => {
             modelUser.select().then((users) => {
-                res.render('person/index', {
+                res.render('user/index', {
                     title: req.app.get('app-name'),
                     version: req.app.get('version'),
                     user: req.user,
@@ -18,7 +18,7 @@ var userController = (io) => {
     io.on('connection', (socket) => {
         socket.on('insert', (data) => {
             modelUser.insert(data).then((user) => {
-                var fn = pug.compileFile('./views/person/row.pug');
+                var fn = pug.compileFile('./views/user/row.pug');
                 io.emit('inserted', {
                     id: user._id,
                     html: fn({ user: user })
@@ -26,11 +26,11 @@ var userController = (io) => {
             });
         });
         socket.on('update', (data) => {
-            modelUser.update(data).then((person) => {
-                var fn = pug.compileFile('./views/person/row.pug');
+            modelUser.update(data).then((user) => {
+                var fn = pug.compileFile('./views/user/row.pug');
                 io.emit('updated', {
-                    id: person._id,
-                    html: fn({ person: person })
+                    id: user._id,
+                    html: fn({ user: user })
                 });
             });
         });
