@@ -36,7 +36,7 @@ passport.serializeUser(function (user, callback) {
 });
 
 passport.deserializeUser(function (id, callback) {
-	modelUser.getUserById(id).then((user) => {
+	modelUser.getUser(id).then((user) => {
 		if (user) {
 			callback(null, {
 				id: user._id,
