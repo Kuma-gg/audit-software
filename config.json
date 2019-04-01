@@ -1,16 +1,16 @@
 {
     "development": {
-        "port": 9000,
-        "mongoConfig":{
-            "url": "mongodb://ci-mastery-user:ci-mastery-password-6@ds213183.mlab.com:13183/ci-mastery",
-            "dbName": "ci-mastery"
+        "port": 3000,
+        "mongoConfig": {
+            "url": "mongodb://audit-software-user:audit-software-password-6@ds141932.mlab.com:41932/audit-software",
+            "dbName": "audit-software"
         }
     },
     "production": {
-        "port": 9000,
-        "mongoConfig":{
-            "url": "mongodb://ci-mastery-user-production:ci-mastery-password-production-6@ds119113.mlab.com:19113/ci-mastery-production",
-            "dbName": "ci-mastery-production"
+        "port": 3000,
+        "mongoConfig": {
+            "url": "mongodb://audit-software-production-user:audit-software-production-password-6@ds231740.mlab.com:31740/audit-software-production",
+            "dbName": "audit-software-production"
         }
     }
 }

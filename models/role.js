@@ -1,45 +1,27 @@
 var assert = require("assert");
 var mongodb = require("mongodb");
 const con = require("./connection"),
-    collectionName = "user";
+    collectionName = "role";
 
 /**
  * @constructor
- * @namespace userModel
+ * @namespace roleModel
  * @version 1.0
- * @property {function} select - Router handler for GET method of /user URL.
- * @property {function} insert - Router handler for POST method of /user URL.
- * @property {function} update - SocketIo event for connections to user room.
- * @property {function} remove - SocketIo event for connections to user room.
- * @class user
+ * @property {function} select - Router handler for GET method of /role URL.
+ * @property {function} insert - Router handler for POST method of /role URL.
+ * @property {function} update - SocketIo event for connections to role room.
+ * @property {function} remove - SocketIo event for connections to role room.
+ * @class role
  */
 
 var model = {
     /**
-     * Query selection for user collection. Returns an array of selected documents
+     * Query selection for role collection. Returns an array of selected documents
      * @method select
      * @param {object} data - Query filters. 
      * @returns {array} 
-     * @memberof userModel
+     * @memberof roleModel
      */
-    selectUserWithRole: (data) => {
-        return new Promise((resolve, reject) => {
-            con.then((db) => {
-                const collection = db.collection(collectionName);
-                collection.aggregate(
-                    { $unwind: "$role" },
-                    {
-                        $lookup: {
-                            from: "role",
-                            localField: "role",
-                            foreignField: "_id",
-                            as: "role"
-                        }
-                    }
-                );
-            });
-        });
-    },
     select: (data = {}) => {
         if (data.id) {
             data._id = new mongodb.ObjectID(data.id);
@@ -56,14 +38,14 @@ var model = {
         });
     },
     /**
-     * Insert query to for a user document. Returns inserted document.
+     * Insert query to for a role document. Returns inserted document.
      * @method insert
      * @param {object} data - Query filters.
      * @returns {object} 
-     * @property {string} data.name - user's name.
-     * @property {string} data.lastName - user's paternal and maternal last name.
-     * @property {Date} data.birthday - user's birth date.
-     * @memberof userModel
+     * @property {string} data.name - role's name.
+     * @property {string} data.lastName - role's paternal and maternal last name.
+     * @property {Date} data.birthday - role's birth date.
+     * @memberof roleModel
      */
     insert: (data) => {
         return new Promise((resolve, reject) => {
@@ -79,15 +61,15 @@ var model = {
         });
     },
     /**
-     * Update query to for a user document. Returns updated document.
+     * Update query to for a role document. Returns updated document.
      * @method update
      * @param {object} data - Query filters.
      * @returns {object} 
-     * @property {string} data.id - user's ID to update.
-     * @property {string} data.name - New user's name to replace.
-     * @property {string} data.lastName - New user's paternal and maternal last name to replace.
-     * @property {Date} data.birthday - New user's birth date to replace.
-     * @memberof userModel
+     * @property {string} data.id - role's ID to update.
+     * @property {string} data.name - New role's name to replace.
+     * @property {string} data.lastName - New role's paternal and maternal last name to replace.
+     * @property {Date} data.birthday - New role's birth date to replace.
+     * @memberof roleModel
     */
     update: (data) => {
         return new Promise((resolve, reject) => {
@@ -102,11 +84,11 @@ var model = {
         });
     },
     /**
-     * Remove query to for a user document. Returns document ID to confirm removing.
+     * Remove query to for a role document. Returns document ID to confirm removing.
      * @method remove
-     * @param {string} id - user's ID document to remove.
+     * @param {string} id - role's ID document to remove.
      * @returns {string}
-     * @memberof userModel
+     * @memberof roleModel
      */
     remove: (id) => {
         return new Promise((resolve, reject) => {

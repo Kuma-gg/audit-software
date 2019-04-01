@@ -70,7 +70,7 @@ function addUpdateListener(ele) {
         inputName.value = data.name;
         inputLastName.value = data.lastName;
         inputBirthday.value = data.birthday;
-        inputUsername = data.username;
+        inputUsername.value = data.username;
         inputPassword.value = "";
         inputRepeatPassword.value = "";
         errorMessage.innerHTML = "";
