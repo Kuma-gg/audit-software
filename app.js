@@ -36,13 +36,13 @@ passport.serializeUser(function (user, callback) {
 });
 
 passport.deserializeUser(function (id, callback) {
-	modelUser.select({ id: id }).then((user) => {
-		if (user.length == 1) {
+	modelUser.getUserById(id).then((user) => {
+		if (user) {
 			callback(null, {
-				id: user[0]._id,
-				name: user[0].name,
-				lastName: user[0].lastName,
-				role: { id: 777, name: "manager" }
+				id: user._id,
+				name: user.name,
+				lastName: user.lastName,
+				role: user.role
 			});
 		} else {
 			//The user does not exist
