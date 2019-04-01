@@ -1,8 +1,9 @@
 extends ../layout
 block content
     h3 Users
-    a#newButton.waves-effect.waves-light.btn.green
-        i.material-icons add
+    if loggedUser.isAdmin
+        a#newButton.waves-effect.waves-light.btn.green
+            i.material-icons add
     table.highlight
         thead
             tr
@@ -11,43 +12,45 @@ block content
                 th Birthday
                 th Username
                 th Role
-                th Actions
+                if loggedUser.isAdmin
+                    th Actions
         tbody#table
             each user in users
                 include ./row
-    #modal.modal
-        .modal-content
-            h4#modalTitle
-            .row
-                input#inputId.validate(type="hidden")
-                .input-field.col.s12.m6
-                    input#inputName.validate(type="text")
-                    label(for="inputName") First Name
-                .input-field.col.s12.m6
-                    input#inputLastName.validate(type="text")
-                    label(for="inputLastName") Last Name
-                .input-field.col.s12.m6
-                    select#selectRole
-                        -var i = true
-                        each role in roles
-                            option(value=role._id, selected=(i)? true : false )=role.name
-                            -i = false
-                    label(for="selectRole") Role                
-                .input-field.col.s12.m6
-                    input#inputUsername.validate(type="text")
-                    label(for="inputUsername") Username
-                .input-field.col.s12.m6
-                    input#inputPassword.validate(type="password")
-                    label(for="inputPassword") Password
-                .input-field.col.s12.m6
-                    input#inputRepeatPassword.validate(type="password")
-                    label(for="inputRepeatPassword") Repeat Password
-                .input-field.col.s12.m6
-                    input#inputBirthday.datepicker(type="text")
-                    label(for="inputBirthday") Birthday
-                ul#errorMessage.red-text.col.s12.m6
-        .modal-footer
-            a.modal-close.waves-effect.waves-red.btn-flat(href='javascript:void(0);') Cancel
-            a#modalSubmit.waves-effect.waves-green.btn-flat(href='javascript:void(0);')
-block scripts
-    script(src="/js/user.js")
+    if loggedUser.isAdmin
+        #modal.modal
+            .modal-content
+                h4#modalTitle
+                .row
+                    input#inputId.validate(type="hidden")
+                    .input-field.col.s12.m6
+                        input#inputName.validate(type="text")
+                        label(for="inputName") First Name
+                    .input-field.col.s12.m6
+                        input#inputLastName.validate(type="text")
+                        label(for="inputLastName") Last Name
+                    .input-field.col.s12.m6
+                        select#selectRole
+                            -var i = true
+                            each role in roles
+                                option(value=role._id, selected=(i)? true : false )=role.name
+                                -i = false
+                        label(for="selectRole") Role                
+                    .input-field.col.s12.m6
+                        input#inputUsername.validate(type="text")
+                        label(for="inputUsername") Username
+                    .input-field.col.s12.m6
+                        input#inputPassword.validate(type="password")
+                        label(for="inputPassword") Password
+                    .input-field.col.s12.m6
+                        input#inputRepeatPassword.validate(type="password")
+                        label(for="inputRepeatPassword") Repeat Password
+                    .input-field.col.s12.m6
+                        input#inputBirthday.datepicker(type="text")
+                        label(for="inputBirthday") Birthday
+                    ul#errorMessage.red-text.col.s12.m6
+            .modal-footer
+                a.modal-close.waves-effect.waves-red.btn-flat(href='javascript:void(0);') Cancel
+                a#modalSubmit.waves-effect.waves-green.btn-flat(href='javascript:void(0);')
+        block scripts
+            script(src="/js/user.js")

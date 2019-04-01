@@ -16,6 +16,7 @@ var io = app.io = require("socket.io")();
 var ioUser = io.of("/user");
 
 /* Passport for user auth */
+const adminRoleId = "5ca25140fb6fc0465d50202c";
 passport.use(new Strategy(function (username, password, callback) {
 	modelUser.checkUserCredentials(username, md5(password)).then((user) => {
 		if (user) {
@@ -23,7 +24,8 @@ passport.use(new Strategy(function (username, password, callback) {
 				id: user._id,
 				name: user.name,
 				lastName: user.lastName,
-				role: user.role
+				role: user.role,
+				isAdmin: user.role._id == adminRoleId
 			});
 		} else {
 			return callback(null, false);
@@ -42,7 +44,8 @@ passport.deserializeUser(function (id, callback) {
 				id: user._id,
 				name: user.name,
 				lastName: user.lastName,
-				role: user.role
+				role: user.role,
+				isAdmin: user.role._id == adminRoleId
 			});
 		} else {
 			//The user does not exist

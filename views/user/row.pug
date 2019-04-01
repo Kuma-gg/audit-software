@@ -6,8 +6,9 @@ tr(id=`row-${user._id}`)
     td=user.birthday
     td=user.username
     td=user.role.name
-    td
-        a(id=`uptadeButton-${user._id}`, data-object=user).update.waves-effect.waves-light.btn.blue
-            i.material-icons edit
-        a(id=`removeButton-${user._id}`, data-id=user._id).remove.waves-effect.waves-light.btn.red
-            i.material-icons delete
+    if loggedUser.isAdmin
+        td
+            a(id=`uptadeButton-${user._id}`, data-object=user).update.waves-effect.waves-light.btn.blue
+                i.material-icons edit
+            a(id=`removeButton-${user._id}`, data-id=user._id).remove.waves-effect.waves-light.btn.red
+                i.material-icons delete

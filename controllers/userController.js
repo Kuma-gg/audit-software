@@ -9,12 +9,11 @@ var userController = (io) => {
         /* GET home page. */
         userPage: (req, res, next) => {
             modelUser.getEnabledUsers().then((users) => {
-                console.log(users);
                 modelRole.select().then((roles) => {
                     res.render("user/index", {
                         title: req.app.get("app-name"),
                         version: req.app.get("version"),
-                        user: req.user,
+                        loggedUser: req.user,
                         users: users,
                         roles: roles
                     });

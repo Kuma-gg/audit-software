@@ -19,7 +19,7 @@ html
 							li
 								a.dropdown-trigger(href='javascript:void(0);',  data-target='dropdown-menu')
 									i.material-icons.left person
-									| #{user.name} #{user.role.name}
+									| #{loggedUser.name} #{loggedUser.role.name}
 						ul#dropdown-menu.dropdown-content
 							li
 								a(href='/profile', title="My profile").black-text My profile
@@ -34,8 +34,8 @@ html
 				.background.red.darken-4
 				a(href='#user')
 					img.circle(src='/img/PenguinDab.png')
-				span.white-text.name=user.name
-				span.white-text.email=user.role.name
+				span.white-text.name=loggedUser.name
+				span.white-text.email=loggedUser.role.name
 			li
 				a(href="/users") Users
 			li
