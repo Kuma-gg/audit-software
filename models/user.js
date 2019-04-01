@@ -57,6 +57,12 @@ var model = {
                     },
                     {
                         $unwind: "$role"
+                    },
+                    {
+                        $project: {
+                            password: 0,
+                            roleId: 0
+                        }
                     }
                 ]).toArray((err, docs) => {
                     assert.equal(err, null);
@@ -85,6 +91,12 @@ var model = {
                     },
                     {
                         $unwind: "$role"
+                    },
+                    {
+                        $project: {
+                            password: 0,
+                            roleId: 0
+                        }
                     }
                 ]).toArray((err, docs) => {
                     assert.equal(err, null);
@@ -114,6 +126,12 @@ var model = {
                     },
                     {
                         $unwind: "$role"
+                    },
+                    {
+                        $project: {
+                            password: 0,
+                            roleId: 0
+                        }
                     }
                 ]).toArray((err, docs) => {
                     assert.equal(err, null);

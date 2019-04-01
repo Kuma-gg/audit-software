@@ -73,7 +73,7 @@
             inputLastName.value = data.lastName;
             inputBirthday.value = data.birthday;
             inputUsername.value = data.username;
-            selectRole.value = data.roleId;
+            selectRole.value = data.role.id;
             inputPassword.value = "";
             inputRepeatPassword.value = "";
             errorMessage.innerHTML = "";
