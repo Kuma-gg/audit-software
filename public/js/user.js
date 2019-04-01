@@ -12,6 +12,7 @@ var inputBirthday = document.getElementById("inputBirthday");
 var inputUsername = document.getElementById("inputUsername");
 var inputPassword = document.getElementById("inputPassword");
 var inputRepeatPassword = document.getElementById("inputRepeatPassword");
+var selectRole = document.getElementById("selectRole");
 var errorMessage = document.getElementById("errorMessage");
 var table = document.getElementById("table");
 var picker = M.Datepicker.getInstance(inputBirthday);
@@ -89,7 +90,8 @@ function getForm() {
         birthday: new Date(birthdayTokens[2], parseInt(birthdayTokens[1]) - 1, birthdayTokens[0]),
         username: inputUsername.value,
         password: inputPassword.value,
-        repeatPassword: inputRepeatPassword.value
+        repeatPassword: inputRepeatPassword.value,
+        roleId: selectRole.value
     };
 }
 
@@ -100,6 +102,7 @@ socket.on("inserted", (object) => {
         addRemoveListener(document.getElementById(`removeButton-${object.id}`));
         modal.close();
     } else {
+        errorMessage.innerHTML = "";
         object.failedList.forEach((invalid) => {
             var li = document.createElement("li");
             li.innerHTML = invalid;

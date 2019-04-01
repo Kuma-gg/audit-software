@@ -26,8 +26,12 @@ block content
                     input#inputLastName.validate(type="text")
                     label(for="inputLastName") Last Name
                 .input-field.col.s12.m6
-                    input#inputBirthday.datepicker(type="text")
-                    label(for="inputBirthday") Birthday
+                    select#selectRole
+                        -var i = true
+                        each role in roles
+                            option(value=role._id, selected=(i)? true : false )=role.name
+                            -i = false
+                    label(for="selectRole") Role                
                 .input-field.col.s12.m6
                     input#inputUsername.validate(type="text")
                     label(for="inputUsername") Username
@@ -37,11 +41,12 @@ block content
                 .input-field.col.s12.m6
                     input#inputRepeatPassword.validate(type="password")
                     label(for="inputRepeatPassword") Repeat Password
-            .row
-                ul#errorMessage.red-text.col.s12
+                .input-field.col.s12.m6
+                    input#inputBirthday.datepicker(type="text")
+                    label(for="inputBirthday") Birthday
+                ul#errorMessage.red-text.col.s12.m6
         .modal-footer
             a.modal-close.waves-effect.waves-red.btn-flat(href='javascript:void(0);') Cancel
             a#modalSubmit.waves-effect.waves-green.btn-flat(href='javascript:void(0);')
-            
 block scripts
     script(src="/js/user.js")

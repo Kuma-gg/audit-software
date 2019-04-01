@@ -78,6 +78,29 @@ var model = {
             });
         });
     },
+    newUser: (name, lastName, birthday, username, password, roleId) => {
+        return new Promise((resolve, reject) => {
+            con.then((db) => {
+                const collection = db.collection(collectionName);
+                collection.insertOne({
+                    name: name,
+                    lastName: lastName,
+                    birthday: birthday,
+                    username: username,
+                    password: password,
+                    role: {
+                        "$ref": "role",
+                        "$id": new mongodb.ObjectID(roleId)
+                    }
+                }, (err, result) => {
+                    assert.equal(err, null);
+                    assert.equal(1, result.result.n);
+                    assert.equal(1, result.ops.length);
+                    resolve(result.ops[0]);
+                });
+            });
+        });
+    },
     /**
      * Update query to for a user document. Returns updated document.
      * @method update

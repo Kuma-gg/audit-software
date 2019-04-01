@@ -1,4 +1,5 @@
 var modelUser = require("../models/user");
+var modelRole = require("../models/role");
 var pug = require("pug");
 var passwordValidator = require("password-validator");
 var md5 = require("md5");
@@ -8,11 +9,14 @@ var userController = (io) => {
         /* GET home page. */
         userPage: (req, res, next) => {
             modelUser.select().then((users) => {
-                res.render("user/index", {
-                    title: req.app.get("app-name"),
-                    version: req.app.get("version"),
-                    user: req.user,
-                    users: users
+                modelRole.select().then((roles) => {
+                    res.render("user/index", {
+                        title: req.app.get("app-name"),
+                        version: req.app.get("version"),
+                        user: req.user,
+                        users: users,
+                        roles: roles
+                    });
                 });
             });
         }
@@ -33,9 +37,14 @@ var userController = (io) => {
                 var failedList = passwordSchema.validate(data.password, { list: true });
                 if (failedList.length == 0) {
                     var fn = pug.compileFile("./views/user/row.pug");
-                    data.password = md5(data.password);
-                    delete data.repeatPassword;
-                    modelUser.insert(data).then((user) => {
+                    modelUser.newUser(
+                        data.name,
+                        data.lastName,
+                        data.birthday,
+                        data.username,
+                        md5(data.password),
+                        data.roleId
+                    ).then((user) => {
                         io.emit("inserted", {
                             success: true,
                             id: user._id,
