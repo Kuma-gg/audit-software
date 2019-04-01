@@ -8,7 +8,8 @@ var userController = (io) => {
     var pages = {
         /* GET home page. */
         userPage: (req, res, next) => {
-            modelUser.select().then((users) => {
+            modelUser.getEnabledUsers().then((users) => {
+                console.log(users);
                 modelRole.select().then((roles) => {
                     res.render("user/index", {
                         title: req.app.get("app-name"),
@@ -44,11 +45,13 @@ var userController = (io) => {
                         data.username,
                         md5(data.password),
                         data.roleId
-                    ).then((user) => {
-                        io.emit("inserted", {
-                            success: true,
-                            id: user._id,
-                            html: fn({ user: user })
+                    ).then((insertedUser) => {
+                        modelUser.getUser(insertedUser._id).then((user) => {
+                            io.emit("inserted", {
+                                success: true,
+                                id: user._id,
+                                html: fn({ user: user })
+                            });
                         });
                     });
                 } else {

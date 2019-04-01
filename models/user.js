@@ -22,24 +22,6 @@ var model = {
      * @returns {array} 
      * @memberof userModel
      */
-    selectUserWithRole: (data) => {
-        return new Promise((resolve, reject) => {
-            con.then((db) => {
-                const collection = db.collection(collectionName);
-                collection.aggregate(
-                    { $unwind: "$role" },
-                    {
-                        $lookup: {
-                            from: "role",
-                            localField: "role",
-                            foreignField: "_id",
-                            as: "role"
-                        }
-                    }
-                );
-            });
-        });
-    },
     select: (data = {}) => {
         if (data.id) {
             data._id = new mongodb.ObjectID(data.id);
@@ -51,6 +33,62 @@ var model = {
                 collection.find(data).toArray((err, docs) => {
                     assert.equal(err, null);
                     resolve(docs);
+                });
+            });
+        });
+    },
+    getEnabledUsers: () => {
+        return new Promise((resolve, reject) => {
+            con.then((db) => {
+                const collection = db.collection(collectionName);
+                collection.aggregate([
+                    {
+                        $match: {
+                            enabled: true
+                        }
+                    },
+                    {
+                        $lookup: {
+                            from: "role",
+                            localField: "roleId",
+                            foreignField: "_id",
+                            as: "role"
+                        }
+                    },
+                    {
+                        $unwind: "$role"
+                    }
+                ]).toArray((err, docs) => {
+                    assert.equal(err, null);
+                    resolve(docs);
+                });
+            });
+        });
+    },
+    getUser: (id) => {
+        return new Promise((resolve, reject) => {
+            con.then((db) => {
+                const collection = db.collection(collectionName);
+                collection.aggregate([
+                    {
+                        $match: {
+                            _id: new mongodb.ObjectID(id)
+                        }
+                    },
+                    {
+                        $lookup: {
+                            from: "role",
+                            localField: "roleId",
+                            foreignField: "_id",
+                            as: "role"
+                        }
+                    },
+                    {
+                        $unwind: "$role"
+                    }
+                ]).toArray((err, docs) => {
+                    assert.equal(err, null);
+                    resolve(docs[0]);
                 });
             });
         });
@@ -88,10 +126,8 @@ var model = {
                     birthday: birthday,
                     username: username,
                     password: password,
-                    role: {
-                        "$ref": "role",
-                        "$id": new mongodb.ObjectID(roleId)
-                    }
+                    roleId: new mongodb.ObjectID(roleId),
+                    enabled: true
                 }, (err, result) => {
                     assert.equal(err, null);
                     assert.equal(1, result.result.n);
