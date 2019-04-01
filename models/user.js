@@ -93,6 +93,35 @@ var model = {
             });
         });
     },
+    checkUserCredentials: (username, password) => {
+        return new Promise((resolve, reject) => {
+            con.then((db) => {
+                const collection = db.collection(collectionName);
+                collection.aggregate([
+                    {
+                        $match: {
+                            username: username,
+                            password: password
+                        }
+                    },
+                    {
+                        $lookup: {
+                            from: "role",
+                            localField: "roleId",
+                            foreignField: "_id",
+                            as: "role"
+                        }
+                    },
+                    {
+                        $unwind: "$role"
+                    }
+                ]).toArray((err, docs) => {
+                    assert.equal(err, null);
+                    resolve(docs[0]);
+                });
+            });
+        });
+    },
     /**
      * Insert query to for a user document. Returns inserted document.
      * @method insert

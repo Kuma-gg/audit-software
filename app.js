@@ -17,13 +17,13 @@ var ioUser = io.of("/user");
 
 /* Passport for user auth */
 passport.use(new Strategy(function (username, password, callback) {
-	modelUser.select({ username: username, password: md5(password) }).then((user) => {
-		if (user.length == 1) {
+	modelUser.checkUserCredentials(username, md5(password)).then((user) => {
+		if (user) {
 			return callback(null, {
-				id: user[0]._id,
-				name: user[0].name,
-				lastName: user[0].lastName,
-				role: { id: 777, name: "manager" }
+				id: user._id,
+				name: user.name,
+				lastName: user.lastName,
+				role: user.role
 			});
 		} else {
 			return callback(null, false);
