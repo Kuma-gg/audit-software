@@ -187,7 +187,7 @@ var model = {
             });
         });
     },
-    newUser: (name, lastName, birthday, username, password, roleId, forceUpdatePassword, passwordExpirationDate, attempts) => {
+    newUser: (name, lastName, birthday, username, password, email, roleId, resetPasswordOnFirstLogin, passwordExpiration, attempts) => {
         return new Promise((resolve, reject) => {
             con.then((db) => {
                 const collection = db.collection(collectionName);
@@ -200,8 +200,8 @@ var model = {
                     roleId: new mongodb.ObjectID(roleId),
                     lastLogIn: null,
                     lastLogOut: null,
-                    forceUpdatePassword: forceUpdatePassword,
-                    passwordExpirationDate: passwordExpirationDate,
+                    resetPasswordOnFirstLogin: resetPasswordOnFirstLogin,
+                    passwordExpiration: passwordExpiration,
                     attempts: attempts,
                     enabled: true
                 }, (err, result) => {

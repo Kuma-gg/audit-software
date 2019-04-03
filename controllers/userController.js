@@ -1,5 +1,6 @@
 var modelUser = require("../models/user");
 var modelRole = require("../models/role");
+var modelPassword = require("../models/password");
 var pug = require("pug");
 var passwordValidator = require("password-validator");
 var md5 = require("md5");
@@ -10,15 +11,12 @@ var userController = (io) => {
         userPage: (req, res, next) => {
             modelUser.getEnabledUsers().then((users) => {
                 modelRole.select().then((roles) => {
-                    modelPassword.select().then((passwordConfiguration) => {
-                        res.render("user/index", {
-                            title: req.app.get("app-name"),
-                            version: req.app.get("version"),
-                            loggedUser: req.user,
-                            users: users,
-                            roles: roles,
-                            passwordConfiguration: passwordConfiguration[0]
-                        });
+                    res.render("user/index", {
+                        title: req.app.get("app-name"),
+                        version: req.app.get("version"),
+                        loggedUser: req.user,
+                        users: users,
+                        roles: roles
                     });
                 });
             });
@@ -28,40 +26,43 @@ var userController = (io) => {
         socket.on("insert", (data) => {
             if (md5(data.password) === md5(data.repeatPassword)) {
                 //Validation
-                var passwordSchema = new passwordValidator();
-                passwordSchema
-                    .is().min(8)                                    // Minimum length 8
-                    .is().max(100)                                  // Maximum length 100
-                    .has().uppercase()                              // Must have uppercase letters
-                    .has().lowercase()                              // Must have lowercase letters
-                    .has().digits()                                 // Must have digits
-                    .has().not().spaces()                           // Should not have spaces
-                    .is().not().oneOf(["password", "Password", "123"]); // Blacklist these values
-                var failedList = passwordSchema.validate(data.password, { list: true });
-                if (failedList.length == 0) {
-                    var fn = pug.compileFile("./views/user/row.pug");
-                    modelUser.newUser(
-                        data.name,
-                        data.lastName,
-                        data.birthday,
-                        data.username,
-                        md5(data.password),
-                        data.roleId,
-                        data.forceUpdatePassword,
-                        data.passwordExpirationDate,
-                        3
-                    ).then((insertedUser) => {
-                        modelUser.getUser(insertedUser._id).then((user) => {
-                            io.emit("inserted", {
-                                success: true,
-                                id: user._id,
-                                html: fn({ user: user })
+                modelPassword.getConfiguration().then((passwordConfiguration) => {
+                    var passwordSchema = new passwordValidator();
+                    passwordSchema
+                        .is().min(passwordConfiguration.minimumCharacters)
+                        .is().max(passwordConfiguration.maximumCharacters)
+                        .is().not().oneOf(["password", "Password", "123"]); // Blacklist these values
+                    if (passwordConfiguration.hasUppercase) passwordSchema.has().uppercase();
+                    if (passwordConfiguration.hasLowercase) passwordSchema.has().lowercase();
+                    if (passwordConfiguration.hasNumber) passwordSchema.has().digits();
+                    if (passwordConfiguration.hasSpace) passwordSchema.has().spaces();
+                    var failedList = passwordSchema.validate(data.password, { list: true });
+                    if (failedList.length == 0) {
+                        var fn = pug.compileFile("./views/user/row.pug");
+                        modelUser.newUser(
+                            data.name,
+                            data.lastName,
+                            data.birthday,
+                            data.username,
+                            md5(data.password),
+                            data.email,
+                            data.roleId,
+                            passwordConfiguration.resetPasswordOnFirstLogin,
+                            passwordConfiguration.passwordExpiration,
+                            passwordConfiguration.attempts
+                        ).then((insertedUser) => {
+                            modelUser.getUser(insertedUser._id).then((user) => {
+                                io.emit("inserted", {
+                                    success: true,
+                                    id: user._id,
+                                    html: fn({ user: user })
+                                });
                             });
                         });
-                    });
-                } else {
-                    invalidPassword(failedList);
-                }
+                    } else {
+                        invalidPassword(failedList);
+                    }
+                });
             } else {
                 invalidPassword(["notEqual"]);
             }

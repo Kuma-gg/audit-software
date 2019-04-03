@@ -12,6 +12,9 @@ block content
         .input-field.col.s12.m4
             input#inputPasswordExpiration.validate(type="text", value=passwordConfiguration.passwordExpiration)
             label(for="inputPasswordExpiration") Expiration days
+        .input-field.col.s12.m4
+            input#inputAttempts.validate(type="text", value=passwordConfiguration.attempts)
+            label(for="inputAttempts") Attempts
     .row
         .col.s12.m6
             label
@@ -28,7 +31,15 @@ block content
         .col.s12.m6
             label
                 input#checkSpace(type='checkbox', data-original="true", checked=passwordConfiguration.hasSpace)
-                span Must not have spaces
+                span Must have spaces
+        .col.s12.m6
+            label
+                input#checkResetPasswordOnFirstLogin(type='checkbox', checked=passwordConfiguration.resetPasswordOnFirstLogin)
+                span Must reset password on first login
+        .col.s12.m6
+            label
+                input#checkBirthday(type='checkbox', checked=passwordConfiguration.birthday)
+                span Must not contain Birthday as password
     .row
         a#buttonSubmit.col.s12.m3.waves-effect.btn.darken-4(href='javascript:void(0);') Save
 block scripts

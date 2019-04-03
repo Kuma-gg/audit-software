@@ -22,7 +22,7 @@ var model = {
      * @returns {array} 
      * @memberof passwordModel
      */
-    select: (data = {}) => {
+    getConfiguration: (data = {}) => {
         if (data.id) {
             data._id = new mongodb.ObjectID(data.id);
             delete data.id;
@@ -32,7 +32,7 @@ var model = {
                 const collection = db.collection(collectionName);
                 collection.find(data).toArray((err, docs) => {
                     assert.equal(err, null);
-                    resolve(docs);
+                    resolve(docs[0]);
                 });
             });
         });
