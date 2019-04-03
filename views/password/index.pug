@@ -1,19 +1,37 @@
 extends ../layout
 block content
-    h3 Password configuration    
+    h3 Password configuration
+    input#inputId(type="hidden")
     .row
-        input#inputId.validate(type="hidden")
         .input-field.col.s12.m6
-            input#inputName.validate(type="text")
-            label(for="inputName") First Name
+            input#inputMaximum.validate(type="text")
+            label(for="inputMaximum") Maximum characters
         .input-field.col.s12.m6
-            input#inputLastName.validate(type="text")
-            label(for="inputLastName") Last Name          
+            input#inputMinimum.validate(type="text")
+            label(for="inputMinimum") Minimum characters
+    .row
         .input-field.col.s12.m6
-            input#inputUsername.validate(type="text")
-            label(for="inputUsername") Username
-        .input-field.col.s12.m6
-            input#inputPassword.validate(type="password")
-            label(for="inputPassword") Password                   
+            input#inputPasswordExpiration.validate(type="text")
+            label(for="inputPasswordExpiration") Expiration days
+        .col.s12.m6
+            label
+                input#checkUppercase(type='checkbox', data-original="true")
+                span Must have Uppercase
+    .row
+        .col.s12.m6
+            label
+                input#checkLowercase(type='checkbox', data-original="true")
+                span Must have Lowercase
+        .col.s12.m6
+            label
+                input#checkNumber(type='checkbox', data-original="true")
+                span Must have numbers
+    .row
+        .col.s12.m6
+            label
+                input#checkSpace(type='checkbox', data-original="true")
+                span Must not have spaces
+    .row
+        a#buttonSubmit.col.s12.m3.waves-effect.btn.darken-4(href='javascript:void(0);') Save
 block scripts
-    script(src="/js/user.js")
+    script(src="/js/password.js")

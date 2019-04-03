@@ -17,9 +17,12 @@ html
 							i.material-icons menu
 						ul#nav-mobile.right.hide-on-med-and-down
 							li
+								a(href='/password-configuration') Password config
+									i.material-icons.left lock
+							li
 								a.dropdown-trigger(href='javascript:void(0);',  data-target='dropdown-menu')
 									i.material-icons.left person
-									| #{loggedUser.name} #{loggedUser.role.name}
+									| #{loggedUser.name} #{loggedUser.role.name}							
 						ul#dropdown-menu.dropdown-content
 							li
 								a(href='/profile', title="My profile").black-text My profile

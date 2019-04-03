@@ -106,8 +106,6 @@
         var birthdayTokens = inputBirthday.value.split("/");
         var passwordExpirationDateTokens = inputPasswordExpirationDate.value.split("/");
         var passwordExpirationTimeTokens = inputPasswordExpirationTime.value.split(":");
-        console.log(passwordExpirationDateTokens);
-        console.log(passwordExpirationTimeTokens);
         return {
             id: inputId.value,
             name: inputName.value,

@@ -17,9 +17,9 @@ var userController = (io) => {
     };
     io.on("connection", (socket) => {
         socket.on("update", (data) => {
-            modelUser.update(data).then((user) => {
+            modelPassword.update(data).then((passwordConfiguration) => {
                 io.emit("updated", {
-                    id: user._id,
+                    success: true,
                 });
             });
         });
