@@ -68,38 +68,40 @@ var userController = (io) => {
             }
 
             function invalidPassword(failedList) {
-                var messages = [];
-                failedList.forEach((invalid) => {
-                    switch (invalid) {
-                        case "notEqual":
-                            messages.push("Please make sure you repeated the correct password.");
-                            break;
-                        case "min":
-                            messages.push("The password is too short. You need more than 8 characters.");
-                            break;
-                        case "max":
-                            messages.push("The password is too long. You need less than 100 characters.");
-                            break;
-                        case "uppercase":
-                            messages.push("The password requires uppercase letters.");
-                            break;
-                        case "lowercase":
-                            messages.push("The password requires lowercase letters.");
-                            break;
-                        case "digits":
-                            messages.push("The password requires digits.");
-                            break;
-                        case "spaces":
-                            messages.push("The password cannot have spaces.");
-                            break;
-                        case "oneOf":
-                            messages.push("Weak password.");
-                            break;
-                    }
-                });
-                io.emit("inserted", {
-                    success: false,
-                    failedList: messages,
+                modelPassword.getConfiguration().then((passwordConfiguration) => {
+                    var messages = [];
+                    failedList.forEach((invalid) => {
+                        switch (invalid) {
+                            case "notEqual":
+                                messages.push("Please make sure you repeated the correct password.");
+                                break;
+                            case "min":
+                                messages.push(`The password is too short. Min: ${passwordConfiguration.minimumCharacters}`);
+                                break;
+                            case "max":
+                                messages.push(`The password is too long. Max: ${passwordConfiguration.maximumCharacters}`);
+                                break;
+                            case "uppercase":
+                                messages.push("The password requires uppercase letters.");
+                                break;
+                            case "lowercase":
+                                messages.push("The password requires lowercase letters.");
+                                break;
+                            case "digits":
+                                messages.push("The password requires digits.");
+                                break;
+                            case "spaces":
+                                messages.push("The password requieres spaces.");
+                                break;
+                            case "oneOf":
+                                messages.push("Weak password.");
+                                break;
+                        }
+                    });
+                    io.emit("inserted", {
+                        success: false,
+                        failedList: messages,
+                    });
                 });
             }
         });

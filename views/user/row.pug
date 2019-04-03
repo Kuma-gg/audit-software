@@ -10,6 +10,6 @@ tr(id=`row-${user._id}`)
         td
             a(id=`uptadeButton-${user._id}`, data-object=user).update.waves-effect.waves-light.btn.blue
                 i.material-icons edit
-            if loggedUser.id !== user._id
+            if loggedUser.id != user._id.toString()
                 a(id=`removeButton-${user._id}`, data-id=user._id).remove.waves-effect.waves-light.btn.red
                     i.material-icons delete
