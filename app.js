@@ -19,25 +19,41 @@ var ioUser = io.of("/user");
 const adminRoleId = "5ca25140fb6fc0465d50202c";
 passport.use(new Strategy(function (username, password, callback) {
 	modelUser.checkUsername(username).then((usernameChecked) => {
+		if (!usernameChecked) {
+			return callback(null, false, { message: "User does not exist." });
+		}
 		if (usernameChecked.attempts > 0) {
 			modelUser.checkUserCredentials(username, md5(password)).then((user) => {
 				if (user) {
-					modelUser.updateUserAttempts(user._id, 3).then(() => {
-						return callback(null, {
-							id: user._id,
-							name: user.name,
-							lastName: user.lastName,
-							role: user.role,
-							isAdmin: user.role._id == adminRoleId
+					if (user.enabled) {
+						// Login successful
+						modelUser.updateUserAttempts(user._id, 3).then(() => {
+							return callback(null, {
+								id: user._id,
+								name: user.name,
+								lastName: user.lastName,
+								role: user.role,
+								isAdmin: user.role._id == adminRoleId
+							});
 						});
-					});
+					} else {
+						// Account blocked
+						return callback(null, false, { message: "Your account is blocked." });
+					}
 				} else {
-					modelUser.updateUserAttempts(usernameChecked._id, usernameChecked.attempts - 1).then(() => {
-						return callback(null, false, { message: "Incorrect user credentials." });
+					// Incorrect credentials
+					modelUser.updateUserAttempts(usernameChecked._id, usernameChecked.attempts - 1).then((userUpdated) => {
+						if (userUpdated.attempts > 0) {
+							return callback(null, false, { message: `Incorrect password, you have ${userUpdated.attempts} attempt${(userUpdated.attempts > 1) ? "s" : ""} left. Your account will be blocked.` });
+						} else {
+							// Block account for too many attempts
+							return callback(null, false, { message: `${userUpdated.name}, your account is now blocked for too many attempts. Please contact IT for mercy.` });
+						}
 					});
 				}
 			});
 		} else {
+			// Limit attempts, block account
 			return callback(null, false, { message: "Too many attempts, your account is blocked." });
 		}
 	});

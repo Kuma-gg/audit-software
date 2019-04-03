@@ -155,9 +155,11 @@ var model = {
         return new Promise((resolve, reject) => {
             con.then((db) => {
                 const collection = db.collection(collectionName);
-                collection.findOneAndUpdate({ _id: new mongodb.ObjectID(id) }, { $set: { attempts: attempts } }, function (err, docs) {
+                collection.findOneAndUpdate({ _id: new mongodb.ObjectID(id) }, { $set: { attempts: attempts, enabled: attempts > 0 } }, function (err, docs) {
                     assert.equal(err, null);
-                    resolve(docs[0]);
+                    model.select({ id: id }).then((doc) => {
+                        resolve(doc[0]);
+                    });
                 });
             });
         });
