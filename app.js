@@ -14,6 +14,7 @@ var modelUser = require("./models/user");
 var app = express();
 var io = app.io = require("socket.io")();
 var ioUser = io.of("/user");
+var ioPasswordCofiguration = io.of("/password");
 
 /* Passport for user auth */
 const adminRoleId = "5ca25140fb6fc0465d50202c";
@@ -98,9 +99,11 @@ app.use(flash());
 /* Routes */
 var indexRouter = require("./routes/indexRouter");
 var userRouter = require("./routes/userRouter");
+var passwordRouter = require("./routes/passwordRouter");
 var killMeRouter = require("./routes/kill-me");
 app.use("/", indexRouter);
 app.use("/users", userRouter(ioUser));
+app.use("/password-configuration", passwordRouter(ioPasswordCofiguration));
 app.use("/killme", killMeRouter);
 
 /* catch 404 and forward to error handler. */

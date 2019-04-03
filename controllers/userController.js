@@ -23,7 +23,6 @@ var userController = (io) => {
     };
     io.on("connection", (socket) => {
         socket.on("insert", (data) => {
-            console.log(data);
             if (md5(data.password) === md5(data.repeatPassword)) {
                 //Validation
                 var passwordSchema = new passwordValidator();

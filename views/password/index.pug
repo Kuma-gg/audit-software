@@ -1,0 +1,19 @@
+extends ../layout
+block content
+    h3 Password configuration    
+    .row
+        input#inputId.validate(type="hidden")
+        .input-field.col.s12.m6
+            input#inputName.validate(type="text")
+            label(for="inputName") First Name
+        .input-field.col.s12.m6
+            input#inputLastName.validate(type="text")
+            label(for="inputLastName") Last Name          
+        .input-field.col.s12.m6
+            input#inputUsername.validate(type="text")
+            label(for="inputUsername") Username
+        .input-field.col.s12.m6
+            input#inputPassword.validate(type="password")
+            label(for="inputPassword") Password                   
+block scripts
+    script(src="/js/user.js")
