@@ -10,7 +10,7 @@ var userController = (io) => {
                     title: req.app.get("app-name"),
                     version: req.app.get("version"),
                     loggedUser: req.user,
-                    passwordConfiguration: passwordConfiguration
+                    passwordConfiguration: passwordConfiguration[0]
                 });
             });
         }
@@ -19,6 +19,7 @@ var userController = (io) => {
         socket.on("update", (data) => {
             modelPassword.update(data).then((passwordConfiguration) => {
                 io.emit("updated", {
+                    passwordConfiguration: passwordConfiguration,
                     success: true,
                 });
             });

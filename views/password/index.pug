@@ -1,35 +1,33 @@
 extends ../layout
 block content
     h3 Password configuration
-    input#inputId(type="hidden")
+    input#inputId(type="hidden", value=passwordConfiguration._id)
     .row
-        .input-field.col.s12.m6
-            input#inputMaximum.validate(type="text")
+        .input-field.col.s12.m4
+            input#inputMaximum.validate(type="text", value=passwordConfiguration.maximumCharacters)
             label(for="inputMaximum") Maximum characters
-        .input-field.col.s12.m6
-            input#inputMinimum.validate(type="text")
-            label(for="inputMinimum") Minimum characters
-    .row
-        .input-field.col.s12.m6
-            input#inputPasswordExpiration.validate(type="text")
+        .input-field.col.s12.m4
+            input#inputMinimum.validate(type="text", value=passwordConfiguration.minimumCharacters)
+            label(for="inputMinimum") Minimum characters    
+        .input-field.col.s12.m4
+            input#inputPasswordExpiration.validate(type="text", value=passwordConfiguration.passwordExpiration)
             label(for="inputPasswordExpiration") Expiration days
-        .col.s12.m6
-            label
-                input#checkUppercase(type='checkbox', data-original="true")
-                span Must have Uppercase
     .row
         .col.s12.m6
             label
-                input#checkLowercase(type='checkbox', data-original="true")
+                input#checkUppercase(type='checkbox', checked=passwordConfiguration.hasUppercase)
+                span Must have Uppercase
+        .col.s12.m6
+            label
+                input#checkLowercase(type='checkbox', checked=passwordConfiguration.hasLowercase)
                 span Must have Lowercase
         .col.s12.m6
             label
-                input#checkNumber(type='checkbox', data-original="true")
+                input#checkNumber(type='checkbox', checked=passwordConfiguration.hasNumber)
                 span Must have numbers
-    .row
         .col.s12.m6
             label
-                input#checkSpace(type='checkbox', data-original="true")
+                input#checkSpace(type='checkbox', data-original="true", checked=passwordConfiguration.hasSpace)
                 span Must not have spaces
     .row
         a#buttonSubmit.col.s12.m3.waves-effect.btn.darken-4(href='javascript:void(0);') Save

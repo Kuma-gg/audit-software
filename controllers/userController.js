@@ -10,12 +10,15 @@ var userController = (io) => {
         userPage: (req, res, next) => {
             modelUser.getEnabledUsers().then((users) => {
                 modelRole.select().then((roles) => {
-                    res.render("user/index", {
-                        title: req.app.get("app-name"),
-                        version: req.app.get("version"),
-                        loggedUser: req.user,
-                        users: users,
-                        roles: roles
+                    modelPassword.select().then((passwordConfiguration) => {
+                        res.render("user/index", {
+                            title: req.app.get("app-name"),
+                            version: req.app.get("version"),
+                            loggedUser: req.user,
+                            users: users,
+                            roles: roles,
+                            passwordConfiguration: passwordConfiguration[0]
+                        });
                     });
                 });
             });

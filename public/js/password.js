@@ -1,5 +1,6 @@
 (function () {
     var socket = io("/password");
+    var inputId = document.getElementById("inputId");
     var inputMaximum = document.getElementById("inputMaximum");
     var inputMinimum = document.getElementById("inputMinimum");
     var inputPasswordExpiration = document.getElementById("inputPasswordExpiration");
@@ -15,17 +16,22 @@
 
     function getForm() {
         return {
+            id: inputId.value,
             maximumCharacters: inputMaximum.value,
             minimumCharacters: inputMinimum.value,
             passwordExpiration: inputPasswordExpiration.value,
-            hasUppercase: checkUppercase.value,
-            hasLowercase: checkLowercase.value,
-            hasNumber: checkNumber.value,
-            hasSpace: checkSpace.value
+            hasUppercase: checkUppercase.checked,
+            hasLowercase: checkLowercase.checked,
+            hasNumber: checkNumber.checked,
+            hasSpace: checkSpace.checked
         };
     }
 
     socket.on("updated", (object) => {
-
+        if (object.success) {
+            M.toast({ html: "Configuration saved" });
+        } else {
+            M.toast({ html: "Server error" });
+        }
     });
 })();
