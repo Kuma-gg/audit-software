@@ -23,6 +23,7 @@ var userController = (io) => {
     };
     io.on("connection", (socket) => {
         socket.on("insert", (data) => {
+            console.log(data);
             if (md5(data.password) === md5(data.repeatPassword)) {
                 //Validation
                 var passwordSchema = new passwordValidator();
@@ -43,7 +44,9 @@ var userController = (io) => {
                         data.birthday,
                         data.username,
                         md5(data.password),
-                        data.roleId
+                        data.roleId,
+                        data.forceUpdatePassword,
+                        data.passwordExpirationDate
                     ).then((insertedUser) => {
                         modelUser.getUser(insertedUser._id).then((user) => {
                             io.emit("inserted", {

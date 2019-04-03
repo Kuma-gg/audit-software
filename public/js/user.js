@@ -14,6 +14,10 @@
     var inputPassword = document.getElementById("inputPassword");
     var inputRepeatPassword = document.getElementById("inputRepeatPassword");
     var selectRole = document.getElementById("selectRole");
+    var inputEmail = document.getElementById("inputEmail");
+    var inputPasswordExpirationDate = document.getElementById("inputPasswordExpirationDate");
+    var inputPasswordExpirationTime = document.getElementById("inputPasswordExpirationTime");
+    var checkForceUpdatePassword = document.getElementById("checkForceUpdatePassword");
     var errorMessage = document.getElementById("errorMessage");
     var table = document.getElementById("table");
     var picker = M.Datepicker.getInstance(inputBirthday);
@@ -23,12 +27,15 @@
         modalTitle.innerHTML = "New user";
         modalSumbit.innerHTML = "Create";
         inputId.value = "";
-        inputName.value = "";
-        inputLastName.value = "";
-        inputBirthday.value = "31/03/2019";
-        inputUsername.value = "";
-        inputPassword.value = "";
-        inputRepeatPassword.value = "";
+        inputName.value = "Miguel";
+        inputLastName.value = "Miguel";
+        inputBirthday.value = getLocalTimeFormat(new Date());
+        inputUsername.value = "Miguel";
+        inputPassword.value = "Miguel666";
+        inputRepeatPassword.value = "Miguel666";
+        inputEmail.value = "Miguel@gmail.com";
+        inputPasswordExpirationDate.value = getLocalTimeFormat(new Date(inputPasswordExpirationDate.dataset.original));
+        checkForceUpdatePassword.checked = checkForceUpdatePassword.dataset.original === "true";
         errorMessage.innerHTML = "";
         M.updateTextFields();
         editing = false;
@@ -50,6 +57,13 @@
     for (i = 0; i < removeButtons.length; i++) {
         addRemoveListener(removeButtons[i]);
     }
+
+    function getLocalTimeFormat(date) {
+        return `${checkAndAddZero(date.getDate())}/${checkAndAddZero(date.getMonth() + 1)}/${date.getFullYear()}`;
+        function checkAndAddZero(number) {
+            return number < 10 ? `0${number}` : number;
+        }
+    };
 
     function addRemoveListener(ele) {
         ele.addEventListener("click", () => {
@@ -76,6 +90,10 @@
             selectRole.value = data.role.id;
             inputPassword.value = "";
             inputRepeatPassword.value = "";
+            inputEmail.value = data.email;
+            inputPasswordExpirationDate.value = data.passwordExpirationDate;
+            inputPasswordExpirationTime.value = data.passwordExpirationDate;
+            checkForceUpdatePassword.checked = data.forceUpdatePassword;
             errorMessage.innerHTML = "";
             M.updateTextFields();
             M.FormSelect.init(selects);
@@ -86,6 +104,10 @@
 
     function getForm() {
         var birthdayTokens = inputBirthday.value.split("/");
+        var passwordExpirationDateTokens = inputPasswordExpirationDate.value.split("/");
+        var passwordExpirationTimeTokens = inputPasswordExpirationTime.value.split(":");
+        console.log(passwordExpirationDateTokens);
+        console.log(passwordExpirationTimeTokens);
         return {
             id: inputId.value,
             name: inputName.value,
@@ -94,7 +116,10 @@
             username: inputUsername.value,
             password: inputPassword.value,
             repeatPassword: inputRepeatPassword.value,
-            roleId: selectRole.value
+            roleId: selectRole.value,
+            email: inputEmail.value,
+            passwordExpirationDate: new Date(passwordExpirationDateTokens[2], parseInt(passwordExpirationDateTokens[1]) - 1, passwordExpirationDateTokens[0], passwordExpirationTimeTokens[0], passwordExpirationTimeTokens[1], 0, 0),
+            forceUpdatePassword: checkForceUpdatePassword.checked
         };
     }
 

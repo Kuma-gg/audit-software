@@ -163,7 +163,7 @@ var model = {
             });
         });
     },
-    newUser: (name, lastName, birthday, username, password, roleId) => {
+    newUser: (name, lastName, birthday, username, password, roleId, forceUpdatePassword, passwordExpirationDate) => {
         return new Promise((resolve, reject) => {
             con.then((db) => {
                 const collection = db.collection(collectionName);
@@ -174,6 +174,10 @@ var model = {
                     username: username,
                     password: password,
                     roleId: new mongodb.ObjectID(roleId),
+                    lastLogIn: null,
+                    lastLogOut: null,
+                    forceUpdatePassword: forceUpdatePassword,
+                    passwordExpirationDate: passwordExpirationDate,
                     enabled: true
                 }, (err, result) => {
                     assert.equal(err, null);

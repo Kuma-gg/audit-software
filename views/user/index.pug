@@ -46,9 +46,22 @@ block content
                         input#inputRepeatPassword.validate(type="password")
                         label(for="inputRepeatPassword") Repeat Password
                     .input-field.col.s12.m6
-                        input#inputBirthday.datepicker(type="text")
+                        input#inputBirthday.datepicker(type="text", data-max=new Date())
                         label(for="inputBirthday") Birthday
-                    ul#errorMessage.red-text.col.s12.m6
+                    .input-field.col.s12.m6
+                        input#inputEmail.validate(type="email")
+                        label(for="inputEmail") Email
+                    .input-field.col.s12.m3
+                        input#inputPasswordExpirationDate.datepicker(type="text", data-min=new Date(), data-original=new Date())
+                        label(for="inputPasswordExpirationDate") Password Expiration date
+                    .input-field.col.s12.m3
+                        input#inputPasswordExpirationTime.timepicker(type="text", data-original="10:00")
+                        label(for="inputPasswordExpirationTime") Password Expiration time
+                    .input-field.col.s12.m6
+                        label
+                            input#checkForceUpdatePassword(type='checkbox', data-original="true")
+                            span Force Password to update on first login
+                    ul#errorMessage.red-text.col.s12
             .modal-footer
                 a.modal-close.waves-effect.waves-red.btn-flat(href='javascript:void(0);') Cancel
                 a#modalSubmit.waves-effect.waves-green.btn-flat(href='javascript:void(0);')
