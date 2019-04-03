@@ -1,3 +1,4 @@
+var sessions = {};
 module.exports = {
     loginPage: (req, res, next) => {
         if (req.user) {

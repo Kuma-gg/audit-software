@@ -18,17 +18,27 @@ var ioUser = io.of("/user");
 /* Passport for user auth */
 const adminRoleId = "5ca25140fb6fc0465d50202c";
 passport.use(new Strategy(function (username, password, callback) {
-	modelUser.checkUserCredentials(username, md5(password)).then((user) => {
-		if (user) {
-			return callback(null, {
-				id: user._id,
-				name: user.name,
-				lastName: user.lastName,
-				role: user.role,
-				isAdmin: user.role._id == adminRoleId
+	modelUser.checkUsername(username).then((usernameChecked) => {
+		if (usernameChecked.attempts > 0) {
+			modelUser.checkUserCredentials(username, md5(password)).then((user) => {
+				if (user) {
+					modelUser.updateUserAttempts(user._id, 3).then(() => {
+						return callback(null, {
+							id: user._id,
+							name: user.name,
+							lastName: user.lastName,
+							role: user.role,
+							isAdmin: user.role._id == adminRoleId
+						});
+					});
+				} else {
+					modelUser.updateUserAttempts(usernameChecked._id, usernameChecked.attempts - 1).then(() => {
+						return callback(null, false, { message: "Incorrect user credentials." });
+					});
+				}
 			});
 		} else {
-			return callback(null, false);
+			return callback(null, false, { message: "Too many attempts, your account is blocked." });
 		}
 	});
 }));
@@ -49,7 +59,7 @@ passport.deserializeUser(function (id, callback) {
 			});
 		} else {
 			//The user does not exist
-			return callback(null, false);
+			return callback(null, false, { message: "Login session ended." });
 		}
 	});
 });

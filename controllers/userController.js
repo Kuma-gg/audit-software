@@ -46,7 +46,8 @@ var userController = (io) => {
                         md5(data.password),
                         data.roleId,
                         data.forceUpdatePassword,
-                        data.passwordExpirationDate
+                        data.passwordExpirationDate,
+                        3
                     ).then((insertedUser) => {
                         modelUser.getUser(insertedUser._id).then((user) => {
                             io.emit("inserted", {

@@ -140,6 +140,28 @@ var model = {
             });
         });
     },
+    checkUsername: (username) => {
+        return new Promise((resolve, reject) => {
+            con.then((db) => {
+                const collection = db.collection(collectionName);
+                collection.findOne({ username: username }, (err, doc) => {
+                    assert.equal(err, null);
+                    resolve(doc);
+                });
+            });
+        });
+    },
+    updateUserAttempts: (id, attempts) => {
+        return new Promise((resolve, reject) => {
+            con.then((db) => {
+                const collection = db.collection(collectionName);
+                collection.findOneAndUpdate({ _id: new mongodb.ObjectID(id) }, { $set: { attempts: attempts } }, function (err, docs) {
+                    assert.equal(err, null);
+                    resolve(docs[0]);
+                });
+            });
+        });
+    },
     /**
      * Insert query to for a user document. Returns inserted document.
      * @method insert
@@ -163,7 +185,7 @@ var model = {
             });
         });
     },
-    newUser: (name, lastName, birthday, username, password, roleId, forceUpdatePassword, passwordExpirationDate) => {
+    newUser: (name, lastName, birthday, username, password, roleId, forceUpdatePassword, passwordExpirationDate, attempts) => {
         return new Promise((resolve, reject) => {
             con.then((db) => {
                 const collection = db.collection(collectionName);
@@ -178,6 +200,7 @@ var model = {
                     lastLogOut: null,
                     forceUpdatePassword: forceUpdatePassword,
                     passwordExpirationDate: passwordExpirationDate,
+                    attempts: attempts,
                     enabled: true
                 }, (err, result) => {
                     assert.equal(err, null);
